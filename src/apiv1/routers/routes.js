@@ -22,4 +22,14 @@ let categorysCtrl = require('../controllers/categoryController');
     .get(categorysCtrl.detail)
     .put(categorysCtrl.update)
     .delete(categorysCtrl.delete);
+
+
+let loginCtrl = require('../controllers/loginController');
+  app.route('/apiv1/login')
+    .get(loginCtrl.get)
+
+let registerCtrl = require('../controllers/registerController');
+  app.route('/apiv1/register')
+    .post(registerCtrl.post)
+
 };

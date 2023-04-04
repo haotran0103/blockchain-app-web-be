@@ -1,10 +1,9 @@
-
 const sessions = {};
 const jwt = require('jsonwebtoken');
 module.exports = {
   // Đăng kí API endpoint
   post: (req, res) => {
-    const { username, password, email, name } = req.body;
+    const { username, password, email, name, phone, address } = req.body;
 
     // Kiểm tra xem người dùng đã tồn tại hay chưa
     if (sessions[username]) {
@@ -22,7 +21,9 @@ module.exports = {
         username: username,
         email: email,
         name: name,
-        password: password
+        password: password,
+        phone: phone,
+        address: address
       }
     });
   },

@@ -3,7 +3,7 @@
 const util = require('util')
 const mysql = require('mysql2')
 const db = require('../../configs/configsDatabase')
-
+const check = require('./registerController')
 const sessions = {}
 
 module.exports = {

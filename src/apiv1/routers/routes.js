@@ -32,4 +32,10 @@ let registerCtrl = require('../controllers/registerController');
   app.route('/apiv1/register')
     .post(registerCtrl.post)
 
+let transactionCtrl = require('../controllers/transactionController');
+  app.route('/apiv1/transactionCtrl')
+    .post(transactionCtrl.post)
+    
+ 
+
 };

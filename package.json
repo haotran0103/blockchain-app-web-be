@@ -14,11 +14,15 @@
     "@babel/core": "^7.21.4",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.21.4",
+    "@truffle/hdwallet-provider": "^2.1.9",
+    "axios": "^1.3.5",
     "body-parser": "^1.20.2",
     "config": "^3.3.9",
     "cors": "^2.8.5",
     "dateformat": "^5.0.3",
     "dotenv": "^16.0.3",
+    "ethereumjs-tx": "^2.1.2",
+    "ethers": "^6.3.0",
     "express": "^4.18.2",
     "firebase": "^9.19.1",
     "firebase-admin": "^11.6.0",
@@ -26,7 +30,14 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.2.0",
+<<<<<<< HEAD
     "stripe": "^12.0.0"
+=======
+    "util": "^0.12.5",
+    "utils": "^0.3.1",
+    "web3": "^1.9.0",
+    "window": "^4.2.7"
+>>>>>>> 2c5db466a4e5b8dad2b85ad08153d0a4ee5ef4ab
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

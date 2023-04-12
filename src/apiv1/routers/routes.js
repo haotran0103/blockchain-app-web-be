@@ -31,4 +31,10 @@ module.exports = function (app) {
   let paymentCrtl = require("../controllers/paymentController");
   app.route("/apiv1/payment").post(paymentCrtl.payment);
 
+let transactionCtrl = require('../controllers/transactionController');
+  app.route('/apiv1/transactionCtrl')
+    .post(transactionCtrl.post)
+    
+ 
+
 };

@@ -1,5 +1,6 @@
 const sessions = {};
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+
 module.exports = {
   // Đăng kí API endpoint
   post: (req, res) => {
@@ -7,46 +8,46 @@ module.exports = {
 
     // Kiểm tra xem người dùng đã tồn tại hay chưa
     if (sessions[username]) {
-      return res.status(400).json({ message: 'Người dùng đã tồn tại' });
+      return res.status(400).json({ message: "Người dùng đã tồn tại" });
     }
 
     // Tạo token cho người dùng mới
-    const token = jwt.sign({ username: username }, 'secretkey');
+    const token = jwt.sign({ username: username }, "secretkey");
     sessions[username] = token;
-
+    console.log("thành công");
     res.json({
       success: true,
-      message: 'Người dùng đã được đăng kí thành công',
+      message: "Người dùng đã được đăng kí thành công",
       data: {
         username: username,
         email: email,
         name: name,
         password: password,
         phone: phone,
-        address: address
-      }
+        address: address,
+      },
     });
   },
-  
+
   // Yêu cầu API cần xác thực
   get: (req, res) => {
-    res.json({ message: 'Dữ liệu cần xác thực' });
+    res.json({ message: "Dữ liệu cần xác thực" });
   },
-  
+
   // Xác thực middleware
   verifyToken: (req, res, next) => {
-    const token = req.headers['authorization'];
+    const token = req.headers["authorization"];
     if (!token) {
-      return res.status(401).json({ message: 'Không có quyền truy cập' });
+      return res.status(401).json({ message: "Không có quyền truy cập" });
     }
-  
+
     // Xác thực token
-    jwt.verify(token, 'secretkey', (err, decoded) => {
+    jwt.verify(token, "secretkey", (err, decoded) => {
       if (err) {
-        return res.status(401).json({ message: 'Token không hợp lệ' });
+        return res.status(401).json({ message: "Token không hợp lệ" });
       }
       req.username = decoded.username;
       next();
     });
-  }
+  },
 };

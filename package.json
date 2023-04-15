@@ -28,16 +28,13 @@
     "firebase-admin": "^11.6.0",
     "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "mysql2": "^3.2.0",
-<<<<<<< HEAD
-    "stripe": "^12.0.0"
-=======
     "util": "^0.12.5",
     "utils": "^0.3.1",
     "web3": "^1.9.0",
     "window": "^4.2.7"
->>>>>>> 2c5db466a4e5b8dad2b85ad08153d0a4ee5ef4ab
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

@@ -297,8 +297,3 @@ post: async (req, res) => {
     res.status(500).send('Server error');
   }
 }};
-
-// Khởi động server
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
-});

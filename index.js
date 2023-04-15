@@ -9,7 +9,7 @@ const connection = require("./src/configs/configsDatabase");
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 const isProduction = process.env.NODE_ENV === "production";
 app.options("*", (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");

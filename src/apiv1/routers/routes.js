@@ -31,10 +31,9 @@ module.exports = function (app) {
   let paymentCrtl = require("../controllers/paymentController");
   app.route("/apiv1/payment").post(paymentCrtl.payment);
 
-let transactionCtrl = require('../controllers/transactionController');
-  app.route('/apiv1/transactionCtrl')
-    .post(transactionCtrl.post)
-    
- 
+  let transactionCtrl = require("../controllers/transactionController");
+  app.route("/apiv1/transactionCtrl").post(transactionCtrl.post);
 
+  let projectScateCrtl = require("../controllers/project_category");
+  app.route("/apiv1/projectCategory/:categoryID").get(projectScateCrtl.get);
 };

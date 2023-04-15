@@ -1,6 +1,18 @@
 const express = require('express');
 const Web3 = require('web3');
-const tokenAbi = [[
+const router = express.Router();
+
+// Khởi tạo đối tượng Web3 với mạng Binance Smart Chain testnet
+const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+
+// Địa chỉ ví của người dùng
+const userAddress = '0x504459ea734539D93aE09897e1dfEf983c43de76';
+
+// Mã thông báo (token) cần giao dịch
+const tokenAddress = '0x63822ee5acD4E49f193a73345fD13f05f6118Aec';
+
+// ABI (Application Binary Interface) của mã thông báo
+const tokenABI =[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -247,53 +259,52 @@ const tokenAbi = [[
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]]
+];
 
-const app = express();
+// Tạo đối tượng hợp đồng thông báo
 
-// Kết nối tới RPC endpoint của mạng Sepolia
-const web3 = new Web3('https://rpc.sepolia.dev');
-
-// Địa chỉ của smart contract của token cần chuyển
-const contractAddress = '0x504459ea734539D93aE09897e1dfEf983c43de76';
-
-// Khởi tạo đối tượng của smart contract
-const tokenContract = new web3.eth.Contract(tokenAbi, contractAddress);
-
-
+const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
 module.exports = {
-// API endpoint để chuyển token
+// Chức năng giao dịch thông báo
 post: async (req, res) => {
   try {
-    // Lấy thông tin từ body request
-    const { fromAddress, toAddress, amount, privateKey } = req.body;
-
-    // Kiểm tra địa chỉ ví gửi và ví nhận có hợp lệ hay không
-    if (!web3.utils.isAddress(fromAddress) || !web3.utils.isAddress(toAddress)) {
-      return res.status(400).send('Invalid address');
+    const recipientAddress = req.body.recipientAddress;
+    const amount = req.body.amount;
+	
+    // Kiểm tra số dư tài khoản người dùng
+    const balance = await tokenContract.methods.balanceOf(userAddress).call();
+    if (balance < amount) {
+      return res.status(400).json({ message: 'Not enough balance' });
     }
 
-    // Kiểm tra số lượng token cần chuyển có hợp lệ hay không
-    if (amount <= 0) {
-      return res.status(400).send('Invalid amount');
-    }
+    // Tạo đối tượng giao dịch
+    const transaction = tokenContract.methods.transfer(recipientAddress, amount);
 
-    // Tạo transaction object để chuyển token
-    const txObject = {
-      from: fromAddress,
-      to: toAddress,
-      value: amount,
-      gasPrice: web3.utils.toWei('10', 'gwei'),
-      gasLimit: 210000
-    };
+    // Lấy thông tin gasPrice và gasLimit
+    const gasPrice = await web3.eth.getGasPrice();
+    const gasLimit = await transaction.estimateGas({ from: userAddress });
 
-    // Ký và gửi transaction
-    const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
-    const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    // Tạo đối tượng giao dịch đã ký
+    const signedTransaction = await web3.eth.accounts.signTransaction(
+      {
+        to: tokenAddress,
+        data: transaction.encodeABI(),
+        gas: gasLimit,
+        gasPrice: gasPrice,
+        from: userAddress
+      },
+      'private_key'
+    );
 
-    res.send(txReceipt);
+    // Gửi giao dịch đã ký đến mạng
+    const transactionHash = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
+	console.log(transactionHash)
+    // Trả về mã hash của giao dịch
+    return res.json({ result: { sendToken: transactionHash } });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server error');
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }};
+
+

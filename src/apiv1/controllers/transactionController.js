@@ -11,6 +11,8 @@ const userAddress = '0x504459ea734539D93aE09897e1dfEf983c43de76';
 // Mã thông báo (token) cần giao dịch
 const tokenAddress = '0x63822ee5acD4E49f193a73345fD13f05f6118Aec';
 
+
+const recipientAddress = '0xbf437fCd5B4875d32eF2e10E0F1Ff8AB1b309e38';
 // ABI (Application Binary Interface) của mã thông báo
 const tokenABI =[
 	{
@@ -266,11 +268,11 @@ const tokenABI =[
 const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
 module.exports = {
 // Chức năng giao dịch thông báo
-post: async (req, res) => {
+ post:async (req, res) => {
   try {
-    const recipientAddress = req.body.recipientAddress;
-    const amount = req.body.amount;
-	
+
+    const {amount} = req.body;
+	console.log(amount)
     // Kiểm tra số dư tài khoản người dùng
     const balance = await tokenContract.methods.balanceOf(userAddress).call();
     if (balance < amount) {

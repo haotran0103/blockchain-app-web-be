@@ -25,15 +25,21 @@ module.exports = function (app) {
   let loginCtrl = require("../controllers/loginController");
   app.route("/apiv1/login").get(loginCtrl.get);
 
-  let registerCtrl = require("../controllers/registerController");
-  app.route("/apiv1/register").post(registerCtrl.post);
-
   let paymentCrtl = require("../controllers/paymentController");
   app.route("/apiv1/payment").post(paymentCrtl.payment);
+
+  let registerCrtl = require("../controllers/registerController");
+  app.route("/apiv1/register/:maVi").post(registerCrtl.post);
 
   let transactionCtrl = require("../controllers/transactionController");
   app.route("/apiv1/transactionCtrl").post(transactionCtrl.post);
 
-  let projectScateCrtl = require("../controllers/project_category");
+  let projectScateCrtl = require("../controllers/project_categoryController");
   app.route("/apiv1/projectCategory/:categoryID").get(projectScateCrtl.get);
+
+  let userCrtl = require("../controllers/userprofileController");
+  app
+    .route("/apiv1/userprofile/:userID")
+    .get(userCrtl.get)
+    .patch(userCrtl.updateprofile);
 };

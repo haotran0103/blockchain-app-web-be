@@ -4,50 +4,21 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   // Đăng kí API endpoint
   post: (req, res) => {
-    const { username, password, email, name, phone, address } = req.body;
+    const selectQuery = `SELECT maVi FROM user WHERE maVi = '${req.params.maVi}'`;
+    const insertQuery = `INSERT INTO user (maVi, userName, emailAdress, phoneNumber, avatar) 
+                         VALUES ('${req.params.maVi}','${req.body.userName}','${req.body.emailAddress}','${req.body.phoneNumber}','${req.body.avatar}')`;
 
-    // Kiểm tra xem người dùng đã tồn tại hay chưa
-    if (sessions[username]) {
-      return res.status(400).json({ message: "Người dùng đã tồn tại" });
-    }
+    db.query(selectQuery, (err, rows) => {
+      if (err) throw err;
 
-    // Tạo token cho người dùng mới
-    const token = jwt.sign({ username: username }, "secretkey");
-    sessions[username] = token;
-    console.log("thành công");
-    res.json({
-      success: true,
-      message: "Người dùng đã được đăng kí thành công",
-      data: {
-        username: username,
-        email: email,
-        name: name,
-        password: password,
-        phone: phone,
-        address: address,
-      },
-    });
-  },
-
-  // Yêu cầu API cần xác thực
-  get: (req, res) => {
-    res.json({ message: "Dữ liệu cần xác thực" });
-  },
-
-  // Xác thực middleware
-  verifyToken: (req, res, next) => {
-    const token = req.headers["authorization"];
-    if (!token) {
-      return res.status(401).json({ message: "Không có quyền truy cập" });
-    }
-
-    // Xác thực token
-    jwt.verify(token, "secretkey", (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: "Token không hợp lệ" });
+      if (rows.length === 0) {
+        db.query(insertQuery, (err, response) => {
+          if (err) throw err;
+          res.json(response);
+        });
+      } else {
+        res.status(400).json({ message: "maVi already exists" });
       }
-      req.username = decoded.username;
-      next();
     });
   },
 };

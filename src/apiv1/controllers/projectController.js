@@ -10,10 +10,11 @@ module.exports = {
     });
   },
   detail: (req, res) => {
-    let sql = "SELECT * FROM project WHERE id = ?";
+    let sql =
+      "SELECT project.*, theLoai.tenLoai FROM project INNER JOIN theLoai ON project.loaiDuAn = theLoai.id and project.id = ?";
     db.query(sql, [req.params.projectID], (err, response) => {
       if (err) throw err;
-      console.log(response)
+      console.log(response);
       res.json(response[0]);
     });
   },
@@ -45,6 +46,7 @@ module.exports = {
       video,
       startDate,
     } = req.body;
+    console.log(maVi);
     const now = moment();
     const currentDate = now.format("DD");
     const currentMonth = now.format("MM");

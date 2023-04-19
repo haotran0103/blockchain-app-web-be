@@ -2,10 +2,10 @@ const db = require("../../configs/configsDatabase");
 const sessions = {};
 const moment = require("moment");
 module.exports = {
-  get: (req, res, next) => {
-    let sql =
-      "SELECT * FROM user INNER JOIN project ON user.maVi = project.maVi WHERE user.maVi = ?";
-    db.query(sql, [req.params.maVi], (err, response) => {
+  get: (req, res) => {
+    let sql = "SELECT * FROM project WHERE maVi = ? ORDER BY ngayTao DESC";
+    db.query(sql, [req.params.userID], (err, response) => {
+      console.log(response);
       if (err) throw err;
       res.json(response);
     });

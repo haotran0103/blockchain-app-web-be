@@ -26,13 +26,16 @@ module.exports = function (app) {
   app.route("/apiv1/login").get(loginCtrl.get);
 
   let paymentCrtl = require("../controllers/paymentController");
-  app.route("/apiv1/payment").post(paymentCrtl.payment);
+  app.route("/apiv1/payment").post(paymentCrtl.payment).get(paymentCrtl.get);
 
   let registerCrtl = require("../controllers/registerController");
   app.route("/apiv1/register/:maVi").post(registerCrtl.post);
 
   let transactionCtrl = require("../controllers/transactionController");
-  app.route("/apiv1/transactionCtrl").post(transactionCtrl.post);
+  app
+    .route("/apiv1/transactionCtrl")
+    .get(transactionCtrl.post)
+    .post(transactionCtrl.save);
 
   let projectScateCrtl = require("../controllers/project_categoryController");
   app.route("/apiv1/projectCategory/:categoryID").get(projectScateCrtl.get);
@@ -42,4 +45,7 @@ module.exports = function (app) {
     .route("/apiv1/userprofile/:userID")
     .get(userCrtl.get)
     .patch(userCrtl.updateprofile);
+
+  let giaoDichCrtl = require("../controllers/giaoDichController");
+  app.route("/apiv1/giaoDich/:maVi").get(giaoDichCrtl.get);
 };

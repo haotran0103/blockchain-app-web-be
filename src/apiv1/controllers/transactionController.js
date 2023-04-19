@@ -1,7 +1,7 @@
 const express = require("express");
 const Web3 = require("web3");
 const router = express.Router();
-
+const db = require("../../configs/configsDatabase");
 // Khởi tạo đối tượng Web3 với mạng Binance Smart Chain testnet
 const web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545");
 
@@ -310,5 +310,14 @@ module.exports = {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });
     }
+  },
+  save: async (req, res) => {
+    const insertQuery = `INSERT INTO giaodich (maGD, maVi, idProject, amount) 
+                         VALUES ('','${req.body.fromAddress}','${req.body.projectID}','${req.body.amount}')`;
+    console.log(insertQuery);
+    db.query(insertQuery, (err, response) => {
+      if (err) throw err;
+      res.json({ message: "Insert success!" });
+    });
   },
 };

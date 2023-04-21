@@ -53,7 +53,7 @@ module.exports = {
     const currentMonth = now.format("MM");
     const currentYear = now.format("YYYY");
     const query = `INSERT INTO project (id, tenProject, moTa, anhBia, video, soTien, diaChiWeb, soTienToiThieu, chucVu, loiHua, loaiDuAn,trangThai,maVi,userName , phoneNumber, emailAddress, address,ngayTao,ngayHetHan,avatarDuAn,tienDo) 
-                    VALUES ('','${projecttitle}', '${moTaDuAn}', '${anhBia}', '${video}', '${Amounts}', '${websiteAddress}', '${khoangTien}', '${chucVu}', '${loiHua}', '${theLoai}','','${maVi}', '${userName}', '${phoneNumber}', '${emailAdress}', '${address}', '${currentYear}}${currentMonth}/${currentDate}', '${startDate}','${avatarDuAn}', ${tienDo}')`;
+                    VALUES ('','${projecttitle}', '${moTaDuAn}', '${anhBia}', '${video}', '${Amounts}', '${websiteAddress}', '${khoangTien}', '${chucVu}', '${loiHua}', '${theLoai}','','${maVi}', '${userName}', '${phoneNumber}', '${emailAdress}', '${address}', '${currentYear}}${currentMonth}/${currentDate}', '${startDate}','${avatarDuAn}', '${tienDo}')`;
     console.log(query);
     db.query(query, (error, results) => {
       if (error) throw error;

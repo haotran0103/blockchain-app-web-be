@@ -57,7 +57,7 @@ module.exports = {
     console.log(query);
     db.query(query, (error, results) => {
       if (error) throw error;
-      res.json({ dict: "/" });
+      res.status(201).json({ dict: "/" });
       console.log("Dự án đã được thêm vào database.");
     });
     // save the url to database

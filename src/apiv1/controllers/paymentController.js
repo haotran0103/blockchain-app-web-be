@@ -42,6 +42,8 @@ module.exports = {
     }
   },
   payment: async (req, res) => {
+    const qs = require("qs");
+    const moment = require("moment");
     const ipAddr =
       req.headers["x-forwarded-for"] ||
       req.connection.remoteAddress ||
@@ -52,51 +54,42 @@ module.exports = {
     const secretKey = process.env.VNP_HASH_SECRET || config.vnp_HashSecret;
     let vnpUrl = process.env.VNP_URL || config.vnp_Url;
     let returnUrl = process.env.VNP_RETURN_URL || config.vnp_ReturnUrl;
-    let createDate = null;
-    let orderId = null;
-
-    import("dateformat")
-      .then((dateformat) => {
-        const date = new Date();
-        createDate = dateformat(date, "yyyymmddHHmmss");
-        orderId = dateformat(date, "HHmmss");
-
-        // Do something with createDate and orderId here
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    var { amount, bankCode, orderInfo, orderType, locale } = req.body;
-    if (!locale) {
-      locale = "vn";
-    }
-    var currCode = "VND";
-    var vnp_Params = {};
-    vnp_Params["vnp_Version"] = "2.1.0";
-    vnp_Params["vnp_Command"] = "pay";
-    vnp_Params["vnp_TmnCode"] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
-    vnp_Params["vnp_Locale"] = locale;
-    vnp_Params["vnp_CurrCode"] = currCode;
-    vnp_Params["vnp_TxnRef"] = orderId;
-    vnp_Params["vnp_OrderInfo"] = orderInfo;
-    vnp_Params["vnp_OrderType"] = orderType;
-    vnp_Params["vnp_Amount"] = amount * 100;
-    vnp_Params["vnp_ReturnUrl"] = returnUrl;
-    vnp_Params["vnp_IpAddr"] = ipAddr;
-    vnp_Params["vnp_CreateDate"] = createDate;
+    const date = new Date();
+    const createDate = moment(date).format("YYYYMMDDHHmmss");
+    const orderId = moment(date).format("HHmmss");
+    const body = qs.parse(req.body);
+    const { amount, bankCode, orderInfo, orderType, locale = "vn" } = body;
+    console.log(req.body);
+    const currCode = "VND";
+    const vnp_Params = {
+      vnp_Version: "2.1.0",
+      vnp_Command: "pay",
+      vnp_TmnCode: tmnCode,
+      vnp_Locale: locale,
+      vnp_CurrCode: currCode,
+      vnp_TxnRef: orderId,
+      vnp_OrderInfo: orderInfo,
+      vnp_OrderType: orderType,
+      vnp_Amount: amount * 100,
+      vnp_ReturnUrl: returnUrl,
+      vnp_IpAddr: ipAddr,
+      vnp_CreateDate: createDate,
+    };
     if (bankCode !== null && bankCode !== "") {
       vnp_Params["vnp_BankCode"] = bankCode;
     }
-    vnp_Params = sortObject(vnp_Params);
-    var querystring = require("qs");
-    var signData = querystring.stringify(vnp_Params, { encode: false });
-    var crypto = require("crypto");
-    var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+    const sortedParams = sortObject(vnp_Params);
+    const signData = Object.keys(sortedParams)
+      .map((key) => `${key}=${sortedParams[key]}`)
+      .join("&");
+    const crypto = require("crypto");
+    const hmac = crypto.createHmac("sha512", secretKey);
+    const signed = hmac.update(signData).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
-    vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+    const queryString = Object.keys(vnp_Params)
+      .map((key) => `${key}=${vnp_Params[key]}`)
+      .join("&");
+    vnpUrl += "?" + queryString;
 
     res.send({ successUrl: vnpUrl });
   },

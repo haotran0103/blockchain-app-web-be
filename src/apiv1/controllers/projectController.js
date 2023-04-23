@@ -70,7 +70,7 @@ module.exports = {
   },
   detail: (req, res) => {
     let sql = "SELECT * FROM project WHERE id = ?";
-    db.query(sql, [req.params.id], (err, response) => {
+    db.query(sql, [req.params.projectID], (err, response) => {
       if (err) throw err;
       res.json(response[0]);
     });

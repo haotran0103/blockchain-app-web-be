@@ -1,3 +1,4 @@
+import dateFormat from 'dateformat';
 function sortObject(obj) {
   let sorted = {};
   let str = [];
@@ -53,7 +54,6 @@ module.exports = {
     let vnpUrl = process.env.VNP_URL || config.vnp_Url;
     let returnUrl = process.env.VNP_RETURN_URL || config.vnp_ReturnUrl;
 
-    const { default: dateFormat } = await import("dateformat");
     const date = new Date();
     const createDate = dateFormat(date, "yyyymmddHHmmss");
 

@@ -23,7 +23,7 @@ module.exports = {
     let sql = "UPDATE project SET ? WHERE id = ?";
     db.query(sql, [data, projectID], (err, response) => {
       if (err) throw err;
-      res.json({ message: "Update success!" });
+      res.status(200).json({ message: "Update success!" });
     });
   },
   store: (req, res) => {
@@ -54,7 +54,6 @@ module.exports = {
     const currentYear = now.format("YYYY");
     const query = `INSERT INTO project (id, tenProject, moTa, anhBia, video, soTien, diaChiWeb, soTienToiThieu, chucVu, loiHua, loaiDuAn,trangThai,maVi,userName , phoneNumber, emailAddress, address,ngayTao,ngayHetHan,avatarDuAn,tienDo) 
                     VALUES ('','${projecttitle}', '${moTaDuAn}', '${anhBia}', '${video}', '${Amounts}', '${websiteAddress}', '${khoangTien}', '${chucVu}', '${loiHua}', '${theLoai}','','${maVi}', '${userName}', '${phoneNumber}', '${emailAdress}', '${address}', '${currentYear}}${currentMonth}/${currentDate}', '${startDate}','${avatarDuAn}', '${tienDo}')`;
-    console.log(query);
     db.query(query, (error, results) => {
       if (error) throw error;
       res.status(201).json({ dict: "/" });

@@ -5,7 +5,6 @@ module.exports = {
   get: (req, res) => {
     let sql = "SELECT * FROM project WHERE maVi = ? ORDER BY ngayTao DESC";
     db.query(sql, [req.params.userID], (err, response) => {
-      console.log(response);
       if (err) throw err;
       res.json(response);
     });

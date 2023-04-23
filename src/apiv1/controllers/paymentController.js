@@ -63,7 +63,7 @@ module.exports = {
     const currCode = "VND";
     const vnp_Params = {
       vnp_Version: "2.1.0",
-      vnp_Command: "pay",
+      vnp_Command: "billPayment",
       vnp_TmnCode: tmnCode,
       vnp_Locale: locale,
       vnp_CurrCode: currCode,

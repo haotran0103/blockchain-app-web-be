@@ -31,6 +31,9 @@ module.exports = function (app) {
   let registerCrtl = require("../controllers/registerController");
   app.route("/apiv1/register/:maVi").post(registerCrtl.post);
 
+  let returnCrtl = require("../controllers/returnController");
+  app.route("/vnpay_return").post(returnCrtl.post);
+
   let transactionCtrl = require("../controllers/transactionController");
   app
     .route("/apiv1/transactionCtrl")

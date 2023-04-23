@@ -1,5 +1,3 @@
-import dateFormat from "dateformat";
-
 function sortObject(obj) {
   let sorted = {};
   let str = [];
@@ -54,11 +52,21 @@ module.exports = {
     const secretKey = process.env.VNP_HASH_SECRET || config.vnp_HashSecret;
     let vnpUrl = process.env.VNP_URL || config.vnp_Url;
     let returnUrl = process.env.VNP_RETURN_URL || config.vnp_ReturnUrl;
+    let createDate = null;
+    let orderId = null;
 
-    const date = new Date();
-    const createDate = dateFormat(date, "yyyymmddHHmmss");
+    import("dateformat")
+      .then((dateformat) => {
+        const date = new Date();
+        createDate = dateformat(date, "yyyymmddHHmmss");
+        orderId = dateformat(date, "HHmmss");
 
-    const orderId = dateFormat(date, "HHmmss");
+        // Do something with createDate and orderId here
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     var { amount, bankCode, orderInfo, orderType, locale } = req.body;
     if (!locale) {
       locale = "vn";

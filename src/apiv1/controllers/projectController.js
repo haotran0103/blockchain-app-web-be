@@ -23,7 +23,7 @@ module.exports = {
     let sql = "UPDATE project SET ? WHERE id = ?";
     db.query(sql, [data, projectID], (err, response) => {
       if (err) throw err;
-      res.json({ message: "Update success!" });
+      res.status(200).json({ message: "Update success!" });
     });
   },
   store: (req, res) => {
@@ -69,4 +69,11 @@ module.exports = {
       res.json({ message: "Delete success!" });
     });
   },
+  detail: (req, res) => {
+    let sql = 'SELECT * FROM project WHERE id = ?'
+    db.query(sql, [req.params.id], (err, response) => {
+        if (err) throw err
+        res.json(response[0])
+    })
+},
 };

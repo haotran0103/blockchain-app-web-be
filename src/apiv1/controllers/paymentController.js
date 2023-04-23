@@ -1,3 +1,5 @@
+import dateFormat from "dateformat";
+
 function sortObject(obj) {
   let sorted = {};
   let str = [];
@@ -52,8 +54,6 @@ module.exports = {
     const secretKey = process.env.VNP_HASH_SECRET || config.vnp_HashSecret;
     let vnpUrl = process.env.VNP_URL || config.vnp_Url;
     let returnUrl = process.env.VNP_RETURN_URL || config.vnp_ReturnUrl;
-    require = require("esm")(module /*, options*/);
-    const dateFormat = require("dateformat");
 
     const date = new Date();
     const createDate = dateFormat(date, "yyyymmddHHmmss");

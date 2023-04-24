@@ -3,9 +3,16 @@ const sessions = {};
 const moment = require("moment");
 module.exports = {
   get: (req, res) => {
-    let sql = "SELECT * FROM project WHERE trangThai=0";
-    db.query(sql, (err, response) => {
+    let s = `SELECT project.*, COUNT(DISTINCT giaodich.maGD) AS num_contributors, SUM(giaodich.amount) AS total_amount
+    FROM project
+    LEFT JOIN giaodich ON giaodich.idProject = project.id
+    WHERE project.trangThai = 0
+    GROUP BY project.id;
+    
+    `;
+    db.query(s, (err, response) => {
       if (err) throw err;
+      console.log(response);
       res.json(response);
     });
   },

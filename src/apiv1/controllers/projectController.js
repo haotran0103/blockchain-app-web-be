@@ -3,7 +3,7 @@ const sessions = {};
 const moment = require("moment");
 module.exports = {
   get: (req, res) => {
-    let sql = "SELECT * FROM project";
+    let sql = "SELECT * FROM project WHERE trangThai=0";
     db.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);

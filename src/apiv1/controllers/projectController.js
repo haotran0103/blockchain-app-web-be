@@ -11,7 +11,7 @@ module.exports = {
   },
   detail: (req, res) => {
     let sql =
-      "SELECT project.*, theloai.tenloai FROM project INNER JOIN theloai ON project.loaiDuAn = theloai.id and project.id = ?";
+      "SELECT project.*, theloai.tenLoai FROM project INNER JOIN theloai ON project.loaiDuAn = theloai.id and project.id = ?";
     db.query(sql, [req.params.projectID], (err, response) => {
       if (err) throw err;
       res.json(response[0]);

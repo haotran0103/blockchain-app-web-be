@@ -4,7 +4,8 @@ const helmet = require("helmet");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const connection = require("./src/configs/configsDatabase");
+const db = require("./src/configs/configsDatabase");
+const moment = require("moment");
 
 dotenv.config();
 
@@ -27,7 +28,21 @@ routes(app);
 
 app.options("*", cors());
 app.use(helmet());
+const updateExpiredRecords = async () => {
+  const currentDate = moment().format("YYYY-MM-DD"); // get current date
+  const records = await db.query(
+    "SELECT * FROM project WHERE ngayHetHan <= ?",
+    [currentDate]
+  ); // get all records with expiration_date equals to current date
+  for (const record of records) {
+    await db.query("UPDATE project SET trangThai = 1 WHERE id = ?", [record.id]); // update status to 1 for each record
+  }
+};
 
+// schedule the cron job to run every day at midnight
+const CronJob = require("cron").CronJob;
+const job = new CronJob("0 0 0 * * *", updateExpiredRecords);
+job.start();
 app.get("/", (req, res) => {
   res.json({
     message: "trang chủ",
